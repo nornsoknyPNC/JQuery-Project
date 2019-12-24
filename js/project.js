@@ -7,20 +7,20 @@ function getUrl() {
 
 // jquer start
 $(document).ready(function () {
-    
-    $('#line').hide(); // hide line
+    $('#ingredient_card').hide();
+    $('#step_card').hide();
     $('#counter').hide(); // hide input count
     requestApi();
-        // click button add to add number guest
-        $('#add').on('click', function () {
-            var sum = $('#number').val();
-            addNumber(sum);
-        });
-        // click button minus to minus number guest
-        $('#minus').on('click', function () {
-            var minusData = $("#number").val();
-            minusNumber(minusData);
-        })
+    // click button add to add number guest
+    $('#add').on('click', function () {
+        var sum = $('#number').val();
+        addNumber(sum);
+    });
+    // click button minus to minus number guest
+    $('#minus').on('click', function () {
+        var minusData = $("#number").val();
+        minusNumber(minusData);
+    })
 });
 
 // request API
@@ -47,7 +47,6 @@ function chooseRecipe(recipe) {
     getRecipe(allData);
 }
 // get quantity
-
 var getQuantity = [];
 var oldGuest = 0;
 
@@ -55,7 +54,8 @@ var oldGuest = 0;
 function getRecipe(recipe) {
     recipe.forEach(recs => {
         $('#value').on('change', () => {
-            $('#line').show();// show line
+            $('#ingredient_card').show();
+            $('#step_card').show();
             $('#counter').show(); // show button count
             var result = $('#value').val();
             if (recs.id == result) {
@@ -73,22 +73,21 @@ function getRecipe(recipe) {
 function getRecipes(myData) {
     var results = "";
     results += `
-    <div class="col-3"></div>
-    <div class="col-3"><h3>${myData.name}</h3></div></div>
-    <div class="col-3"><img src="${myData.iconUrl}" class="img-fluid"></div>
-    <div class="col-3"></div>
+    <div class="col-4"></div>
+    <div class="col-4" id="text"><h3>${myData.name}</h3><img src="${myData.iconUrl}" class="img-thumbnail"></div>
+    <div class="col-4"></div>
     `;
     $('#card').html(results);
 }
-    // get nbguest person
+// get nbguest person
 function getNbguest(data) {
     var getGuest = "";
-        getGuest += `
-            <input type="text" class="form-control text-center" value="${data.nbGuests}" disabled id="number">
+    getGuest += `
+        <input type="text" class="form-control text-center" value="${data.nbGuests}" disabled id="number">
     `;
     $('#numbers').html(getGuest);
 }
-    // display all ingrediant of recipes
+// display all ingrediant of recipes
 function getIngredients(getout) {
     var display = "";
     getout.ingredients.forEach(ing => {
@@ -101,16 +100,16 @@ function getIngredients(getout) {
         `;
         $('#ingredient').html('Ingredients');
         $('#ing').html(display);
-    
+
     })
 }
-    // get instruction
+// get instruction
 function getInstruction(step) {
     var result = "";
     var ing = step.split('<step>');
     for (let i = 1; i < ing.length; i++) {
         result += `
-            <h6 class="text-primary">Step ${i}</h6>
+            <h5 class="text-primary">Step ${i}</h5>
             <p>${ing[i]}</p>
         `;
     }
@@ -123,7 +122,7 @@ function addNumber(number) {
     var add = parseInt(number) + 1;
     if (add <= 15) {
         $("#number").val(add)
-        calculatePerson( $("#number").val());
+        calculatePerson($("#number").val());
     }
 }
 // Decrement Guest
@@ -139,9 +138,9 @@ function minusNumber(number) {
 function calculatePerson(calculate) {
     var newQuantity;
     var result = "";
-        getQuantity.ingredients.forEach(cal => {
-            newQuantity = (cal.quantity/oldGuest)*calculate;
-            result +=`
+    getQuantity.ingredients.forEach(cal => {
+        newQuantity = (cal.quantity / oldGuest) * calculate;
+        result += `
                 <tr>
                     <td><img src="${cal.iconUrl}" width="50" class="img-fluid"></td>
                     <td>${newQuantity}</td>
@@ -149,6 +148,6 @@ function calculatePerson(calculate) {
                     <td>${cal.name}</td>
                 </tr>
             `;
-            $('#ing').html(result);
-        }); 
+        $('#ing').html(result);
+    });
 }
